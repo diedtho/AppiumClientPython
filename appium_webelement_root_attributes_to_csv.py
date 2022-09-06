@@ -34,6 +34,6 @@ for ele_attr in element_attributes:
 df = pd.DataFrame(element_attributes, columns=['Tagname', 'Id', 'Text'])
 print(df)
 
-df.to_csv('app_attributes.csv')
+df.to_csv('app_attributes.csv', sep=';', encoding='utf-8')
 
 driver.close()
