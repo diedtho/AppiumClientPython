@@ -5,6 +5,9 @@ from appium import webdriver
 from pprint import pprint
 from bs4 import BeautifulSoup
 
+from powerpoint_elements import attrs2button
+from operator import attrgetter
+
 desired_caps = {}
 desired_caps["app"] = "Root"
 desired_caps["platformName"] = "Windows"
@@ -20,33 +23,23 @@ elements = session.find_elements_by_xpath('/descendant-or-self::*')
 pprint(elements)
 print('='*222)
 
-
-
-element_attributes = []
-
-for i in range(len(elements)):
-    #print(f"Element Nr. {i} Tag-Name: {elements[i].tag_name}\tId: {elements[i].id}\tName: {elements[i].text}")
-    tagname = elements[i].tag_name
-    elemid = elements[i].id
-    elemtext = elements[i].text
-    element_attributes.append([tagname, elemid, elemtext])
-
-for ele_attr in element_attributes:
-    print(ele_attr)
-
-df = pd.DataFrame(element_attributes, columns=['Tagname', 'Id', 'Text'])
-print(df)
-
-df.to_csv('app_attributes.csv', sep=';', encoding='utf-8')
-
 # Buttons
 buttons = []
-for ele in element_attributes:
-    print(ele[0])
-    if str(ele[0]) in 'ControlType.Button':
-        buttons.append(ele)
 
-print("\nButtons:")
+for i in range(len(elements)):
+    tagname = elements[i].tag_name
+    if str(tagname) in 'ControlType.Button':
+        button = attrs2button(elements[i], i, "unnamed")
+        buttons.append(button)
+
+
 pprint(buttons)
+
+print("\nÖffnen-Buttons")
+text_getter = attrgetter('text')
+#oldest = max(buttons, key=text_getter)
+#print(f"Oldest: {oldest}")
+oeffnen = [button for button in buttons if button.text == 'Öffnen']
+pprint(oeffnen)
 
 driver.close()
