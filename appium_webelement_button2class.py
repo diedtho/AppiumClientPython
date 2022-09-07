@@ -42,4 +42,6 @@ text_getter = attrgetter('text')
 oeffnen = [button for button in buttons if button.text == 'Öffnen']
 pprint(oeffnen)
 
+oeffnen[0].webelement.click()
+
 driver.close()
